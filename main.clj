@@ -53,20 +53,21 @@
 (def DT (transpose-aux D))
 
 
-(defn unimod  [a b] (if  (> a b)  [[1 0][ (- 0 (quot a b) )  1]]   [[1 (- 0 (quot b a)) ][ 0   1]] ))
+(defn unimodular_matrices  
+	[a b] (if  (> a b)  [[1 0][ (- 0 (quot a b) )  1]]   [[1 (- 0 (quot b a)) ][ 0   1]] ))
 (defn euclid [a b] (if  (> a b)  [(mod a b) b]   [a (mod b a)] ))
 
-(unimod  8 3)
+(unimodular_matrices  8 3)
 (euclid 8 3)
 
-(defn  stepdiof  [[a b]  C  ]   [ (euclid a b )  (prodm C (unimod a b))  ]  )
+(defn  stepdiof  [[a b]  C  ]   [ (euclid a b )  (prodm C (unimodular_matrices a b))  ]  )
 
 (stepdiof  [8 3] '((1 0)(0 1)) )
 (println (stepdiof  [8 3] I2 ))
 
 
 (defn diofcalc [[a b]  C]
-  (if (= (* a b) 0) [[a b]  C] (recur (euclid a b )  (prodm C (unimod a b)))))
+  (if (= (* a b) 0) [[a b]  C] (recur (euclid a b )  (prodm C (unimodular_matrices a b)))))
 
 
 (defn diofsol [a b] (diofcalc [a b] I2 ) )
@@ -81,9 +82,12 @@
 
 (println (mod 2022 8))
 
-;;(defn solutionk  [k]   (prodm (second (diofsol 32 37)) [[1][k]] ))
+(defn solutionk  [k a b]   (prodm (second (diofsol a b)) [[1][k]] ))
 
-;;(println  (map  (comp first solutionk)  '(1 2 3 4 5)))
+(defn solutionk_part  [k]   (solutionk k 32 37))
+
+
+(println  (map  (comp first solutionk_part)  '(1 2 3 4 5)))
 ;;(println  (map   solutionk  '(1 2 3 4 5)))
 ;;(defn CLI [v]  (+(* 32 (ffirst v)) (* 37 (first (second v)) ) ) )
 
